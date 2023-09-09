@@ -1,70 +1,50 @@
-# Getting Started with Create React App
+# How to sync state across tabs in React
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Sometimes you need to have state persist between tabs.
 
-## Available Scripts
+In this article I will guide you step-by-step on how to sync state across
+tabs in React. First I will teach you how to *implement* such a feature, and at
+the end of the post I will share with you a library that does this for you, in
+case you want a ready-made solution. [Skip to library]()
 
-In the project directory, you can run:
+This project uses TypeScript but the process is identical to JavaScript, minus the types.
+Learn more about [TypeScript]()
 
-### `npm start`
+## Table of contents
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Setup
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+For this project we won't be using any third-party libraries except for those
+that are needed to run a React project. So let's go ahead and create a fresh
+React project with [create-react-app]().
 
-### `npm test`
+```
+npx create-react-app
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+**note:** create-react-app is not suited for production-grade projects. If you're
+creating an application that will actually be used, consider [Vite]() instead
 
-### `npm run build`
+Alright, now that we have set up our project, let's get coding!
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Used technologies
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+To allow syncing between tabs, we will be utilizing the [BroadcastChannel API]().
+This is a standard API and all major browsers have full support for it. What
+`BroadcastChannel` does is allow you to send and receive data between different
+browsing contexts, such as windows and tabs. 
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+We will be creating a custom React hook `useTabState` that will act in every way
+like a regular `useState` hook, except that the state will be synced between tabs.
+If you don't know what hooks are, you can read more about [React hooks]()
 
-### `npm run eject`
+## The useTabState hook
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Alright, let's write our `useTabState` hook. It's really simple actually!
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+*useTabState.ts*
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
 
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
