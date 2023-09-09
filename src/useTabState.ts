@@ -18,17 +18,20 @@ export default function useTabState<T = any>(
 
     useEffect(() => {
         channel.addEventListener('message', (e: MessageEvent) => {
+            //console.log('msg received')
             setUpdatedState(e.data)
+            //setLocalState(e.data)
         })
     }, [])
     
     useEffect(() => {
+        console.log('local state changed\n')
         channel.postMessage(localState)
     }, [localState])
 
     useEffect(() => {
         if (updatedState) {
-            setLocalState(updatedState!)
+            setLocalState(updatedState)
         }
         
     }, [updatedState])

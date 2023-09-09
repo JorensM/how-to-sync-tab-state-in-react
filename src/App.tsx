@@ -1,6 +1,3 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
 import useTabState from './useTabState';
 
 function App() {
@@ -8,12 +5,11 @@ function App() {
   const [ count, setCount ] = useTabState<number>(0, 'count')
 
   return (
-    <div className="App">
-      <span>{ count.toString() }</span>
+    <div>
       <button
         onClick={() => setCount(count + 1)}
       >
-        +
+        { count }
       </button>
     </div>
   );
