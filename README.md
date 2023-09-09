@@ -44,11 +44,106 @@ If you don't know what hooks are, you can read more about [React hooks]()
 
 ## The useTabState hook
 
-Alright, let's write our `useTabState` hook. It's really simple actually!
+Alright, let's write our `useTabState` hook. It's quite simple actually!
 
 *useTabState.ts*
 ```
+import { useEffect, useMemo, useState } from 'react'
 
+export default function useTabState<T = any>( 
+    initial_value: T, 
+    state_id: string 
+) : 
+    [
+        T,
+        React.Dispatch<React.SetStateAction<T>>
+    ]
+{
+    const [localState, setLocalState] = useState<T>(initial_value)
+    const [updatedState, setUpdatedState] = useState<T | null>(initial_value)
+
+    const channel = useMemo(() => {
+        return new BroadcastChannel(state_id)
+    }, [])
+
+    useEffect(() => {
+        channel.addEventListener('message', (e: MessageEvent) => {
+            setUpdatedState(e.data)
+        })
+    }, [])
+    
+    useEffect(() => {
+        channel.postMessage(localState)
+    }, [localState])
+
+    useEffect(() => {
+        if (updatedState) {
+            setLocalState(updatedState!)
+        }
+        
+    }, [updatedState])
+
+    return [localState, setLocalState]
+}
 ```
 
+Okay, there's some stuff going on here, so let's break it down.
 
+```
+import { useEffect, useMemo, useState } from 'react'
+```
+
+Here we simply import all of our required functions from the `react` module. Learn
+more about [importing]()
+
+```
+/* ... */
+export default function useTabState<T = any>( 
+    initial_value: T, 
+    state_id: string 
+) : 
+    [
+        T,
+        React.Dispatch<React.SetStateAction<T>>
+    ]
+{
+    /* ... */
+}
+```
+
+This is our function declaration. We apply the `export` keyword before it so that
+it can be imported and used by other files.
+
+The `<T = any>` means that this function is generic. Learn more about [Generics]().
+
+This part:
+
+```
+( 
+    initial_value: T, 
+    state_id: string 
+)
+```
+
+Specified which arguments should be passed to the function. The `: string` specified
+which type the specific argument should be.
+
+```
+: 
+    [
+        T,
+        React.Dispatch<React.SetStateAction<T>>
+    ]
+```
+
+This tells us the return type of the function. as  In this case it's
+an array with the `T` generic and a react state dispatch action. The return type
+of our function is the same as that of a regular `useState()` hook.
+
+```
+const [localState, setLocalState] = useState<T>(initial_value)
+const [updatedState, setUpdatedState] = useState<T | null>(initial_value)
+```
+
+Here we are defining the state that our hook will use. I will explain the reason
+why we have two states later in the article.
