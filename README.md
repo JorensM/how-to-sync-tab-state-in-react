@@ -19,8 +19,12 @@ that are needed to run a React project. So let's go ahead and create a fresh
 React project with [create-react-app]().
 
 ```
-npx create-react-app
+npx create-react-app app-name --template typescript
 ```
+
+This will initialize a new React+TypeScript project with the name `app-name`. You
+can change the name to whatever you like
+
 
 **note:** create-react-app is not suited for production-grade projects. If you're
 creating an application that will actually be used, consider [Vite]() instead
